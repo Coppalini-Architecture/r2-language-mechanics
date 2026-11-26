@@ -1,0 +1,18 @@
+# D3 mutants (record 0009); generator: tools/j1_d3_fixture.py receipts/0003-j1-fixture/base OUT
+# name                   | file mutated | byte change                                                          | CHAIN
+lab_noLF                 | lab.txt      | terminal LF removed                                                  | rebuilt over mutated bytes
+self_noLF                | self.txt     | terminal LF removed                                                  | rebuilt over mutated bytes
+chain_noLF               | CHAIN.txt    | terminal LF removed                                                  | the mutated file
+lab_xLF1                 | lab.txt      | one LF appended                                                      | rebuilt over mutated bytes
+self_xLF1                | self.txt     | one LF appended                                                      | rebuilt over mutated bytes
+chain_xLF1               | CHAIN.txt    | one LF appended                                                      | the mutated file
+lab_xLF2                 | lab.txt      | two LFs appended                                                     | rebuilt over mutated bytes
+chain_xLF2               | CHAIN.txt    | two LFs appended                                                     | the mutated file
+chain_cr_l7              | CHAIN.txt    | LF ending line 7 written CR LF                                       | the mutated file
+chain_cr_l20             | CHAIN.txt    | LF ending line 20 (the last row) written CR LF                       | the mutated file
+chain_cr_l5_l12          | CHAIN.txt    | LFs ending lines 5 and 12 written CR LF                              | the mutated file
+lab_cr_l40               | lab.txt      | LF ending line 40 written CR LF                                      | rebuilt over mutated bytes
+self_cr_l20              | self.txt     | LF ending line 20 written CR LF                                      | rebuilt over mutated bytes
+self_nfd23_cr40          | self.txt     | body e-acute at line 23 written e + U+0301 (as 0003 mut_I1); LF ending line 40 written CR LF | rebuilt over mutated bytes
+aux_chain_noLF_badlast   | CHAIN.txt    | terminal LF removed and the first hex digit of the last row's h changed | the mutated file (auxiliary: an I8 observation, not a coordinate mutant)
+# After V (0008), the CR mutants of CHAIN.txt have valid recovered rows; for lab.txt and self.txt mutants I8 passes by construction.

@@ -1,0 +1,20 @@
+# D3 coordinate matrix (record 0009). Raw bytes only; both readers unchanged (0008 versions).
+# raw defects: kind@byte-offset->offset-line, where offset-line = 1 + LF bytes before the offset; LF = LF bytes in the file.
+# kinds: CR first CR byte; noLF end of file, where the terminal LF belongs; xLF<k> first of k extra terminal LFs; NFC start of the first non-NFC line.
+# columns: dir | file, LF count, raw defects | I1 reported by reader A | I1 reported by reader B
+base | none | A PASS | B PASS
+aux_chain_noLF_badlast | CHAIN.txt LF=19 noLF@2946->20 | A CHAIN.txt:1 | B CHAIN.txt:20
+chain_cr_l20 | CHAIN.txt LF=20 CR@2946->20 | A CHAIN.txt:1 | B CHAIN.txt:20
+chain_cr_l5_l12 | CHAIN.txt LF=20 CR@734->5 | A CHAIN.txt:1 | B CHAIN.txt:5
+chain_cr_l7 | CHAIN.txt LF=20 CR@1029->7 | A CHAIN.txt:1 | B CHAIN.txt:7
+chain_noLF | CHAIN.txt LF=19 noLF@2946->20 | A CHAIN.txt:1 | B CHAIN.txt:20
+chain_xLF1 | CHAIN.txt LF=21 xLF1@2947->21 | A CHAIN.txt:1 | B CHAIN.txt:21
+chain_xLF2 | CHAIN.txt LF=22 xLF2@2947->21 | A CHAIN.txt:1 | B CHAIN.txt:22
+lab_cr_l40 | lab.txt LF=172 CR@659->40 | A lab.txt:40 | B lab.txt:40
+lab_noLF | lab.txt LF=171 noLF@2639->172 | A lab.txt:172 | B lab.txt:172
+lab_xLF1 | lab.txt LF=173 xLF1@2640->173 | A lab.txt:173 | B lab.txt:173
+lab_xLF2 | lab.txt LF=174 xLF2@2640->173 | A lab.txt:174 | B lab.txt:174
+self_cr_l20 | self.txt LF=51 CR@332->20 | A self.txt:20 | B self.txt:20
+self_nfd23_cr40 | self.txt LF=51 NFC@349->23 CR@646->40 | A self.txt:40 | B self.txt:40
+self_noLF | self.txt LF=50 noLF@802->51 | A self.txt:51 | B self.txt:51
+self_xLF1 | self.txt LF=52 xLF1@803->52 | A self.txt:52 | B self.txt:52
