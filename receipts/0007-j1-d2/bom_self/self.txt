@@ -1,0 +1,51 @@
+﻿## 2026-11-01T22:00+00:00 S-000001
+kind: THOUGHT
+subject: first
+
+A first note to self.
+
+## 2026-11-02T22:00+00:00 S-000002
+kind: GOAL
+subject: keep-journal
+
+Keep the journal for a full year.
+
+## 2026-11-03T22:00+00:00 S-000003
+kind: REVIEW
+subject: week-one
+
+Week one went as planned.
+
+## 2026-11-05T22:30+00:00 S-000004
+kind: PROSE
+subject: café
+
+Λ wrote this at the café.
+
+## 2026-11-07T07:00+00:00 S-000005
+kind: THOUGHT
+subject: note
+
+Something to act on.
+
+## 2026-11-07T09:10+00:00 S-000006
+kind: THOUGHT
+subject: promoted-note
+refs: S-000005
+promoted: L-000017
+
+Promoted the earlier note.
+
+## 2026-11-08T22:00+00:00 S-000007
+kind: QUOTE
+subject: a-line
+
+A short quote.
+
+## 2026-11-10T22:00+00:00 S-000008
+kind: REVIEW
+subject: close-goal
+closes: S-000002
+outcome: done
+
+Closing the goal early.

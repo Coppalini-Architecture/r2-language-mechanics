@@ -1,0 +1,14 @@
+# D2 mutants (record 0007); generator: tools/j1_d2_fixture.py receipts/0003-j1-fixture/base OUT
+# name            | file mutated | byte change                                              | CHAIN
+bom_lab           | lab.txt      | EF BB BF prepended                                       | rebuilt over mutated bytes
+bom_self          | self.txt     | EF BB BF prepended                                       | rebuilt over mutated bytes
+bom_chain         | CHAIN.txt    | EF BB BF prepended                                       | the mutated file
+cr_lab_first      | lab.txt      | first LF (end of line 1) written CR LF                   | rebuilt over mutated bytes
+cr_lab_bare       | lab.txt      | one CR inserted inside the body text of line 5           | rebuilt over mutated bytes
+cr_lab_bare_hdr   | lab.txt      | one CR inserted inside the first header, between "L-" and "000001" | rebuilt over mutated bytes
+cr_lab_all        | lab.txt      | every LF written CR LF                                   | rebuilt over mutated bytes
+cr_self_all       | self.txt     | every LF written CR LF                                   | rebuilt over mutated bytes
+ctl_first_id_self | self.txt      | first entry removed (six lines); no CR, no BOM; separation control, not a D2 mutant | rebuilt over mutated bytes
+cr_chain_one      | CHAIN.txt    | first LF written CR LF                                   | the mutated file
+cr_chain_all      | CHAIN.txt    | every LF written CR LF                                   | the mutated file
+# For lab.txt and self.txt mutants I8 passes by construction (the chain is built after the defect); the intended failure is I1.
