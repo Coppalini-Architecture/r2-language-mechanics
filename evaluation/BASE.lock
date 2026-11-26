@@ -1,0 +1,5 @@
+base_commit=4f7288269e75dcb1e8bd67ae82ddeb754eac7548
+repository=Coppalini-Architecture/r2-language-mechanics
+base_ref=main
+reader_resolution=repository-tree-at-base_commit
+runtime=python3-isolated;node-when-declared
