@@ -2,7 +2,7 @@
 """j1_check.py DIR  -- reference check for R² journal J1 (integrity checks I1-I8).
 DIR holds lab.txt, self.txt, CHAIN.txt. Reads only. Runs all eight checks and reports
 each failing check with the first offending line (file:line, 1-based).
-Readings of the J-sections adopted here are listed in handoff/0003."""
+Readings of the J-sections adopted here are listed in handoff/0003; the I1-failure carrier is handoff/0008."""
 import re, sys, os, hashlib, unicodedata
 from datetime import datetime, timedelta, timezone
 d = sys.argv[1]
@@ -17,6 +17,11 @@ ALLOWED = {'L': {'kind', 'subject', 'noticed', 'refs', 'closes', 'outcome', 'cor
            'S': {'kind', 'subject', 'refs', 'closes', 'outcome', 'corrects', 'promoted'}}
 OUTCOMES = {'done', 'dropped', 'superseded', 'merged'}
 IDLIST = re.compile(r'^[LS]-\d{6}(, [LS]-\d{6})*$')
+BOM = b'\xef\xbb\xbf'
+def view(b):
+    """V(F) = CRLF->LF(stripOneLeadingBOM(B_F)); handoff 0008. I1 reads raw bytes; I2-I7 and the CHAIN rows read V(F)."""
+    if b.startswith(BOM): b = b[3:]
+    return b.decode('utf-8', 'replace').replace('\r\n', '\n')
 fails = {}
 def fail(k, f, ln):
     fails.setdefault(k, (f, ln))
@@ -42,7 +47,7 @@ for R, fn in FILES:
     except UnicodeDecodeError as e:
         fail('I1', fn, b[:e.start].count(b'\n') + 1); t = b.decode('utf-8', 'replace')
     if not t.endswith('\n') or t.endswith('\n\n'): fail('I1', fn, t.count('\n') + (0 if t.endswith('\n') else 1))
-    lines = t.split('\n')
+    lines = view(b).split('\n')
     if lines and lines[-1] == '': lines = lines[:-1]
     # I2 parse
     i = 0
@@ -83,7 +88,7 @@ for R in 'LS':
 for R in 'LS':
     prev = None; pu = None
     for k, e in enumerate(entries[R]):
-        if e['id'] != k + 1: fail('I3', e['file'], e['line'])
+        if k > 0 and e['id'] != entries[R][k - 1]['id'] + 1: fail('I3', e['file'], e['line'])
         u = utc(e['ts'])
         if u is not None:
             if pu is not None and u < pu: fail('I4', e['file'], e['line'])
@@ -122,7 +127,7 @@ cp = os.path.join(d, 'CHAIN.txt'); cb = open(cp, 'rb').read()
 if cb.startswith(b'\xef\xbb\xbf') or b'\r' in cb or not cb.endswith(b'\n') or cb.endswith(b'\n\n'): fail('I1', 'CHAIN.txt', 1)
 state = {R: (hashlib.sha256(b'J1').digest(), -1, '') for R in 'LS'}
 sizes = {'L': len(raw['lab.txt']), 'S': len(raw['self.txt'])}; files = {'L': raw['lab.txt'], 'S': raw['self.txt']}
-for i, line in enumerate(cb.decode('utf-8', 'replace').split('\n')[:-1], 1):
+for i, line in enumerate(view(cb).split('\n')[:-1], 1):
     m = re.match(r'^(\d{4}-\d{2}-\d{2}) ([LS]) (\d+) ([0-9a-f]{64}) ([0-9a-f]{64})$', line)
     if not m: fail('I8', 'CHAIN.txt', i); continue
     date, R, ln, h, link = m.group(1), m.group(2), int(m.group(3)), m.group(4), m.group(5)

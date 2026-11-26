@@ -72,7 +72,11 @@ def main(d):
         if t == '':
             fail('I1', fn, 1); break
 
-    text = {fn: raw[fn].decode('utf-8', 'replace').replace('\r', '') for fn, _ in FILES}
+    # V(F) = CRLF->LF(stripOneLeadingBOM(B_F)) (handoff 0008): I2-I7 and the CHAIN rows read V(F); I1 and every hash read raw bytes.
+    def view(b):
+        if b.startswith(b'\xef\xbb\xbf'): b = b[3:]
+        return b.decode('utf-8', 'replace').replace('\r\n', '\n')
+    text = {fn: view(raw[fn]) for fn, _ in FILES}
 
     # ---------- parse registers (I2) ----------
     regs = {}   # reg letter -> list of entries
