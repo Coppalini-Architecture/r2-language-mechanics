@@ -1,0 +1,11 @@
+# nmod variants run through tools/qsa_check.js (record 0006)
+# each row replaces the body of `function nmod(x, m)` in a copy of the tool; F1 is the tool's own verdict on receipts/0005-finite-address/s_input_fixture.txt
+# failing rows: fixture rows (s_input) whose recomputation differs, each row evaluated alone with the variant body
+# node v22.23.5 (V8); CPython 3.13 for the reference; Linux x86_64
+# columns: name | body | F1 | failing rows | note
+control | ((x % m) + m) % m | PASS | - | conformant (the body in tools/qsa_check.js)
+truncated | x % m | FAIL | -9007199254740991, -138, -136, -2, -1, 1, 136, 138, 9007199254740991 | JS remainder, sign of the dividend
+absval | Math.abs(x) % m | FAIL | -9007199254740991, -138, -136, -2, -1, 1, 136, 138, 9007199254740991 | magnitude only
+plus_once | (x % m) + (x < 0 ? m : 0) | FAIL | -9007199254740991, -411, -138, -137, -2, -1, 136, 9007199254740991 | adds m on every negative dividend, including a zero remainder
+int32 | (((x | 0) % m) + m) % m | FAIL | -9007199254740991, 9007199254740991 | coerces to 32 bits before the remainder
+floatfloor | x - Math.floor(x / m) * m | PASS | - | floor by floating-point division
