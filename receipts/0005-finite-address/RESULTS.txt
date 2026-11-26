@@ -1,0 +1,27 @@
+QSA CHECK
+S0 sha256 pin PASS 3878 bytes
+S1 declared law text PASS
+S2 declared domains PASS
+A1 range PASS 548 pairs
+A2 uniqueness PASS 548 distinct
+A3 coverage PASS
+A4 a mod 4 = q PASS
+A5 a mod 137 = s PASS
+A6 round-trip (q,s)->a->(q,s) PASS
+A7 round-trip a->(q,s)->a PASS
+F1 s_input fixture file, 14 rows x 6 fields PASS
+  s_input -9007199254740991 -> 127
+  s_input -411 -> 0
+  s_input -138 -> 136
+  s_input -137 -> 0
+  s_input -136 -> 1
+  s_input -2 -> 135
+  s_input -1 -> 136
+  s_input 0 -> 0
+  s_input 1 -> 1
+  s_input 136 -> 136
+  s_input 137 -> 0
+  s_input 138 -> 1
+  s_input 411 -> 0
+  s_input 9007199254740991 -> 10
+RESULT PASS
