@@ -1,0 +1,21 @@
+# auxiliary mutant, outside the shared matrix (record 0010): I8 row coverage is not ruled; A and B differ
+== reader A: aux_chain_noLF_badlast
+I1 FAIL CHAIN.txt:20
+I2 PASS
+I3 PASS
+I4 PASS
+I5 PASS
+I6 PASS
+I7 PASS
+I8 PASS
+RESULT FAIL I1
+== reader B: aux_chain_noLF_badlast
+I1 FAIL CHAIN.txt:20
+I2 PASS
+I3 PASS
+I4 PASS
+I5 PASS
+I6 PASS
+I7 PASS
+I8 FAIL CHAIN.txt:20
+RESULT FAIL I1,I8

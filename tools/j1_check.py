@@ -2,7 +2,7 @@
 """j1_check.py DIR  -- reference check for R² journal J1 (integrity checks I1-I8).
 DIR holds lab.txt, self.txt, CHAIN.txt. Reads only. Runs all eight checks and reports
 each failing check with the first offending line (file:line, 1-based).
-Readings of the J-sections adopted here are listed in handoff/0003; the I1-failure carrier is handoff/0008."""
+Readings of the J-sections adopted here are listed in handoff/0003; the I1-failure carrier is handoff/0008; the I1 coordinate rule is handoff/0010."""
 import re, sys, os, hashlib, unicodedata
 from datetime import datetime, timedelta, timezone
 d = sys.argv[1]
@@ -22,6 +22,25 @@ def view(b):
     """V(F) = CRLF->LF(stripOneLeadingBOM(B_F)); handoff 0008. I1 reads raw bytes; I2-I7 and the CHAIN rows read V(F)."""
     if b.startswith(BOM): b = b[3:]
     return b.decode('utf-8', 'replace').replace('\r\n', '\n')
+def i1_lines(b, nfc):
+    """Raw LF line coordinates (1 + LF bytes before the position) of the covered I1 defects of the bytes b:
+    BOM (offset 0), first CR, first non-NFC line (if nfc), missing terminal LF (end of file), first of k extra terminal LFs.
+    Second value: whether b is valid UTF-8 (NFC is only examined then)."""
+    out = []
+    lf = lambda off: b.count(b'\n', 0, off) + 1
+    if b.startswith(BOM): out.append(1)
+    if b'\r' in b: out.append(lf(b.index(b'\r')))
+    try:
+        t = b.decode('utf-8'); valid = True
+    except UnicodeDecodeError:
+        t = ''; valid = False
+    if valid and nfc:
+        for i, line in enumerate(t.split('\n'), 1):
+            if not unicodedata.is_normalized('NFC', line): out.append(i); break
+    if not b.endswith(b'\n'): out.append(lf(len(b)))
+    elif b.endswith(b'\n\n'):
+        run = len(b) - len(b.rstrip(b'\n')); out.append(lf(len(b) - (run - 1)))
+    return out, valid
 fails = {}
 def fail(k, f, ln):
     fails.setdefault(k, (f, ln))
@@ -37,16 +56,18 @@ def utc(ts):
 raw = {}; entries = {'L': [], 'S': []}
 for R, fn in FILES:
     p = os.path.join(d, fn); b = open(p, 'rb').read(); raw[fn] = b
-    # I1
-    if b.startswith(b'\xef\xbb\xbf'): fail('I1', fn, 1)
-    if b'\r' in b: fail('I1', fn, b[:b.index(b'\r')].count(b'\n') + 1)
-    try:
-        t = b.decode('utf-8')
-        for i, line in enumerate(t.split('\n'), 1):
-            if not unicodedata.is_normalized('NFC', line): fail('I1', fn, i); break
-    except UnicodeDecodeError as e:
-        fail('I1', fn, b[:e.start].count(b'\n') + 1); t = b.decode('utf-8', 'replace')
-    if not t.endswith('\n') or t.endswith('\n\n'): fail('I1', fn, t.count('\n') + (0 if t.endswith('\n') else 1))
+    # I1: earliest raw coordinate over the covered defects (handoff 0010); invalid UTF-8 keeps the legacy order
+    cl, valid = i1_lines(b, True)
+    if valid:
+        if cl: fail('I1', fn, min(cl))
+    else:
+        if b.startswith(b'\xef\xbb\xbf'): fail('I1', fn, 1)
+        if b'\r' in b: fail('I1', fn, b[:b.index(b'\r')].count(b'\n') + 1)
+        try:
+            t = b.decode('utf-8')
+        except UnicodeDecodeError as e:
+            fail('I1', fn, b[:e.start].count(b'\n') + 1); t = b.decode('utf-8', 'replace')
+        if not t.endswith('\n') or t.endswith('\n\n'): fail('I1', fn, t.count('\n') + (0 if t.endswith('\n') else 1))
     lines = view(b).split('\n')
     if lines and lines[-1] == '': lines = lines[:-1]
     # I2 parse
@@ -124,7 +145,8 @@ for R in 'LS':
                 closed.add((tr, tn))
 # I8
 cp = os.path.join(d, 'CHAIN.txt'); cb = open(cp, 'rb').read()
-if cb.startswith(b'\xef\xbb\xbf') or b'\r' in cb or not cb.endswith(b'\n') or cb.endswith(b'\n\n'): fail('I1', 'CHAIN.txt', 1)
+ccl, _ = i1_lines(cb, False)   # CHAIN.txt: BOM, CR, terminal LFs; same coordinate rule as lab.txt and self.txt
+if ccl: fail('I1', 'CHAIN.txt', min(ccl))
 state = {R: (hashlib.sha256(b'J1').digest(), -1, '') for R in 'LS'}
 sizes = {'L': len(raw['lab.txt']), 'S': len(raw['self.txt'])}; files = {'L': raw['lab.txt'], 'S': raw['self.txt']}
 for i, line in enumerate(view(cb).split('\n')[:-1], 1):

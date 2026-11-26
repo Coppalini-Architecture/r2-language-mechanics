@@ -50,6 +50,26 @@ def main(d):
         b = raw[fn]
         if fails.get('I1'):
             break
+        # handoff 0010: for valid UTF-8, report the earliest raw coordinate over the covered defects
+        # (BOM, CR, non-NFC text, missing terminal LF, extra terminal LFs): 1 + LF bytes before the earliest defect position.
+        # Invalid UTF-8 keeps the legacy order below (outside the ruling).
+        try:
+            b.decode('utf-8'); utf8 = True
+        except UnicodeDecodeError:
+            utf8 = False
+        if utf8:
+            pos = []                                   # byte offsets of the first offending byte of each defect
+            if b.startswith(b'\xef\xbb\xbf'): pos.append(0)
+            if b'\r' in b: pos.append(b.index(b'\r'))
+            off = 0
+            for ln in b.decode('utf-8').split('\n'):
+                if unicodedata.normalize('NFC', ln) != ln: pos.append(off); break
+                off += len(ln.encode('utf-8')) + 1
+            if not b.endswith(b'\n'): pos.append(len(b))
+            elif b.endswith(b'\n\n'): pos.append(len(b) - (len(b) - len(b.rstrip(b'\n')) - 1))
+            if pos:
+                fail('I1', fn, 1 + b.count(b'\n', 0, min(pos))); break
+            continue
         if b.startswith(b'\xef\xbb\xbf'):
             fail('I1', fn, 1); break
         try:
