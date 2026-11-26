@@ -1,0 +1,172 @@
+## 2026-11-01T08:00+00:00 L-000001
+kind: NOTICE
+subject: inbox-hygiene
+
+Inbox has three items older than a week.
+
+## 2026-11-01T04:30-05:00 L-000002
+kind: TODO
+subject: restore-test
+refs: L-000001
+
+Run the quarterly restore test.
+
+## 2026-11-01T21:00+09:00 L-000003
+kind: WIP
+subject: spec-draft
+
+Drafting the journal spec, section J-04 next.
+
+## 2026-11-01T20:00+00:00 L-000004
+kind: HABIT
+subject: daily-walk
+habit: walk
+cadence: daily
+done: yes
+
+Declared.
+
+## 2026-11-02T02:45-05:00 L-000005
+kind: UPDATE
+subject: spec-draft
+refs: L-000003
+
+J-04 drafted.
+
+## 2026-11-02T08:10+00:00 L-000006
+kind: NOTICE
+subject: stale-file
+noticed: 2026-11-02T07:58+00:00
+
+A notes file has not changed in a month.
+
+## 2026-11-03T06:00+09:00 L-000007
+kind: HABIT
+subject: daily-walk
+habit: walk
+done: yes
+
+Done.
+
+## 2026-11-03T08:00+00:00 L-000008
+kind: CLOSE
+subject: inbox-hygiene
+closes: L-000001
+outcome: done
+
+Inbox emptied.
+
+## 2026-11-03T05:00-05:00 L-000009
+kind: TODO
+subject: weekly-review
+
+First weekly review.
+
+## 2026-11-03T21:00+00:00 L-000010
+kind: HABIT
+subject: daily-walk
+habit: walk
+done: no
+
+Skipped.
+
+## 2026-11-05T09:00+00:00 L-000011
+kind: NOTICE
+subject: naming
+
+The café label on the shelf file is ambiguous.
+
+## 2026-11-05T04:20-05:00 L-000012
+kind: CORRECT
+subject: stale-file
+corrects: L-000099
+
+The file is an archive, not stale.
+
+## 2026-11-05T22:00+00:00 L-000013
+kind: HABIT
+subject: daily-walk
+habit: walk
+done: yes
+
+Done.
+
+## 2026-11-06T17:00+09:00 L-000014
+kind: CLOSE
+subject: stale-file
+closes: L-000006
+outcome: superseded
+
+Archive; nothing to do.
+
+## 2026-11-06T11:00+00:00 L-000015
+kind: UPDATE
+subject: naming
+refs: L-000011
+
+Renamed the shelf file.
+
+## 2026-11-07T08:00+00:00 L-000016
+kind: CLOSE
+subject: restore-test
+closes: L-000002
+outcome: done
+
+Restore passed.
+
+## 2026-11-07T09:00+00:00 L-000017
+kind: NOTICE
+subject: promote-target
+
+Follow-up from a self entry.
+
+## 2026-11-07T16:00-05:00 L-000018
+kind: HABIT
+subject: daily-walk
+habit: walk
+done: yes
+
+Done.
+
+## 2026-11-08T08:30+00:00 L-000019
+kind: CLOSE
+subject: weekly-review
+closes: L-000009
+outcome: dropped
+
+Dropped; folded into the next one.
+
+## 2026-11-08T12:00+00:00 L-000020
+kind: WIP
+subject: fixture-matrix
+
+Building the fixture.
+
+## 2026-11-09T17:00+09:00 L-000021
+kind: UPDATE
+subject: fixture-matrix
+refs: L-000020
+
+Mutants drafted.
+
+## 2026-11-10T05:30+09:00 L-000022
+kind: NOTICE
+subject: late-notice
+
+Logged at local midnight.
+
+## 2026-11-10T07:00+00:00 L-000023
+kind: CLOSE
+subject: late-notice
+closes: L-000022
+outcome: done
+
+Handled.
+
+## 2026-11-10T09:00+00:00 L-000024
+kind: HABIT
+subject: daily-walk
+habit: walk
+done: yes
+
+Done.
