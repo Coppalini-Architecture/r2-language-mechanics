@@ -1,0 +1,17 @@
+# dir | fragment line | A I8 | B I8 | I8 under T1 | I8 under T2 | A=T1 A=T2 B=T1 B=T2 (y/n)
+base | - | PASS | PASS | PASS | PASS | y y y y
+aux_chain_noLF_badlast | 20 | PASS | FAIL CHAIN.txt:20 | FAIL CHAIN.txt:20 | PASS | n y y n
+chain_cr_l20 | - | PASS | PASS | PASS | PASS | y y y y
+chain_cr_l5_l12 | - | PASS | PASS | PASS | PASS | y y y y
+chain_cr_l7 | - | PASS | PASS | PASS | PASS | y y y y
+chain_noLF | 20 | PASS | PASS | PASS | PASS | y y y y
+chain_xLF1 | - | FAIL CHAIN.txt:21 | FAIL CHAIN.txt:21 | FAIL CHAIN.txt:21 | FAIL CHAIN.txt:21 | y y y y
+chain_xLF2 | - | FAIL CHAIN.txt:21 | FAIL CHAIN.txt:21 | FAIL CHAIN.txt:21 | FAIL CHAIN.txt:21 | y y y y
+lab_cr_l40 | - | PASS | PASS | PASS | PASS | y y y y
+lab_noLF | - | PASS | PASS | PASS | PASS | y y y y
+lab_xLF1 | - | PASS | PASS | PASS | PASS | y y y y
+lab_xLF2 | - | PASS | PASS | PASS | PASS | y y y y
+self_cr_l20 | - | PASS | PASS | PASS | PASS | y y y y
+self_nfd23_cr40 | - | PASS | PASS | PASS | PASS | y y y y
+self_noLF | - | PASS | PASS | PASS | PASS | y y y y
+self_xLF1 | - | PASS | PASS | PASS | PASS | y y y y
